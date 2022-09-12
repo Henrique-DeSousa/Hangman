@@ -44,7 +44,6 @@ if __name__ == '__main__':
         hiddenWordArray.append("_")
     hiddenWordFind = "".join(str(x) for x in hiddenWordArray)
     print(hiddenWordFind)
-    print(hiddenWord)
 
     while gameState:
         print("Pick a Letter or Word")
