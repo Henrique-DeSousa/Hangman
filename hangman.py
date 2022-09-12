@@ -19,8 +19,8 @@ def containsletter(character):
     global lettersused
     global Lives
 
-    if not lettersused.__contains__(character):
-        if hiddenWord.__contains__(character):
+    if not character in lettersused:
+        if character in hiddenWord:
             for i in range(0, len(hiddenWord)):  # in range because need to find the indice!
                 if hiddenWord[i] == character:
                     hiddenWordArray[i] = character
@@ -30,8 +30,8 @@ def containsletter(character):
             lettersused.append(character)
 
 
-def containsword(letter):
-    if hiddenWord == letter:
+def containsword(word):
+    if hiddenWord == word:
         print("You found the Word!")
     else:
         print("\nYou didn't find the Word... :(\nThe word was: " + hiddenWord)
@@ -60,11 +60,12 @@ if __name__ == '__main__':
             print(hiddenWordFind)
             if Lives < 0:
                 print("\nYou didn't find the Word... :(\nThe word was: " + hiddenWord)
-                break
+                gameState = False
+
         else:
             containsword(userInput)
-            break
+            gameState = False
         if hiddenWordFind == hiddenWord:
             print("\nYou found the Word!!\n Congratulations!")
             print(hiddenWordFind)
-            break
+            gameState = False
