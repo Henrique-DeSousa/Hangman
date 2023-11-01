@@ -1,4 +1,3 @@
-import pygame
 import random
 
 words = []  # empty Array to Store words
@@ -12,60 +11,76 @@ file.close()
 
 gameState = True
 Lives = 6
-lettersused = []
+letters_used = []
 
 
-def containsletter(character):
-    global lettersused
+def contains_letter(character):
+    global letters_used
     global Lives
 
-    if not character in lettersused:
+    if character not in letters_used:
         if character in hiddenWord:
-            for i in range(0, len(hiddenWord)):  # in range because need to find the indice!
+            for i in range(0, len(hiddenWord)):  # in range because need to find the indices!
                 if hiddenWord[i] == character:
                     hiddenWordArray[i] = character
-            lettersused.append(character)
+            letters_used.append(character)
         else:
             Lives -= 1
-            lettersused.append(character)
+            letters_used.append(character)
 
 
-def containsword(word):
-    if hiddenWord == word:
-        print("You found the Word!")
+def contains_word(word_input):
+    if hiddenWord == word_input:
+        print("\nYou found the Word!!\nCongratulations!")
     else:
         print("\nYou didn't find the Word... :(\nThe word was: " + hiddenWord)
 
 
-if __name__ == '__main__':
-    hiddenWord = random.choice(words)  # randomly choosing a word
-    hiddenWordArray = []
-    for char in hiddenWord:
-        hiddenWordArray.append("_")
-    hiddenWordFind = "".join(str(x) for x in hiddenWordArray)
-    print(hiddenWordFind)
-
-    while gameState:
-        print("Pick a Letter or Word")
-        while True:  # verify if the input is only Letters or Words
-            userInput = input("Letter/Word: ").lower()
-            if not userInput.isalpha():
-                print("Only letters or words are accepted!")
-                continue  # if it isn't it continues the loop until it's a Letter or Word
-            else:
-                break  # once it's a letter or word, exits the loop
-        if len(userInput) < 2:  # checks to see if the input is a Letter or a Word
-            containsletter(userInput)
-            hiddenWordFind = "".join(str(x) for x in hiddenWordArray)
-            print(hiddenWordFind)
-            if Lives < 0:
-                print("\nYou didn't find the Word... :(\nThe word was: " + hiddenWord)
-                gameState = False
-
+def check_alpha():
+    while True:  # verify if the input is only Letters or Words
+        user_input = input("").lower()  # makes it so the userInput is always lowerCase
+        if not user_input.isalpha():
+            print("Only letters or words are accepted!")
+            continue  # if it isn't it continues the loop until it's a Letter or Word
         else:
-            containsword(userInput)
-            gameState = False
-        if hiddenWordFind == hiddenWord:
-            print("\nYou found the Word!!\n Congratulations!")
-            print(hiddenWordFind)
-            gameState = False
+            return user_input  # once it's a letter or word, exits the loop
+
+
+if __name__ == '__main__':
+    while gameState:
+        Lives = 6
+        hiddenWord = random.choice(words)  # randomly choosing a word
+        hiddenWordArray = []
+        letters_used = []
+        for char in hiddenWord:
+            hiddenWordArray.append("_")
+        hiddenWordFind = "".join(str(x) for x in hiddenWordArray)
+        print(hiddenWordFind)
+        while not Lives < 0:
+            print(letters_used)
+            print(Lives)
+            print("Pick a Letter or Word\nLetter/Word: ")
+            user_input = check_alpha()
+            if len(user_input) < 2:  # checks to see if the input is a Letter or a Word
+                contains_letter(user_input)
+                hiddenWordFind = "".join(str(x) for x in hiddenWordArray)
+                print(hiddenWordFind)
+                if Lives < 0:
+                    print("\nYou didn't find the Word... :(\nThe word was: " + hiddenWord)
+                    gameState = False
+            else:
+                contains_word(user_input)
+                gameState = False
+                Lives = -1
+            if hiddenWordFind == hiddenWord:
+                print("\nYou found the Word!!\nCongratulations!")
+                print(hiddenWordFind)
+                gameState = False
+                Lives = -1
+        if not gameState:
+            print("\nPlay again? (y/n)")
+            user_input = check_alpha()
+            if user_input == "yes" or user_input == "y":
+                gameState = True
+            else:
+                exit(0)
